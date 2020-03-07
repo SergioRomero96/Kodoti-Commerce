@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Catalog.Domain
 {
-    public class productInStock
+    public class ProductInStock
     {
         public int ProductInStockId { get; set; }
         public int ProductId { get; set; }

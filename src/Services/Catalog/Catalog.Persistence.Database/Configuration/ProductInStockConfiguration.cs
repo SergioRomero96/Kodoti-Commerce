@@ -8,16 +8,16 @@ namespace Catalog.Persistence.Database.Configuration
 {
     public class ProductInStockConfiguration
     {
-        public ProductInStockConfiguration(EntityTypeBuilder<productInStock> entityBuilder)
+        public ProductInStockConfiguration(EntityTypeBuilder<ProductInStock> entityBuilder)
         {
             entityBuilder.HasKey(x => x.ProductInStockId);
 
             //Products by default(en el momento que se genere la migracion)
-            var products = new List<productInStock>();
+            var products = new List<ProductInStock>();
             var random = new Random();
             for (var i = 1; i <= 100; i++)
             {
-                products.Add(new productInStock
+                products.Add(new ProductInStock
                 {
                     ProductInStockId = i,
                     ProductId = i,

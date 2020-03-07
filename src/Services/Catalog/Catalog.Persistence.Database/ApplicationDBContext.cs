@@ -16,7 +16,7 @@ namespace Catalog.Persistence.Database
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<productInStock> Stocks { get; set; }
+        public DbSet<ProductInStock> Stocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace Catalog.Persistence.Database
         private void ModelConfig(ModelBuilder modelBuilder)
         {
             new ProductConfiguration(modelBuilder.Entity<Product>());
-            new ProductInStockConfiguration(modelBuilder.Entity<productInStock>());
+            new ProductInStockConfiguration(modelBuilder.Entity<ProductInStock>());
         }
     }
 }
