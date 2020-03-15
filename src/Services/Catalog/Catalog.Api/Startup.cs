@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using Catalog.Persistence.Database;
 using Catalog.Service.Queries;
 using Common.Logging;
+using HealthChecks.UI.Client;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -36,7 +39,15 @@ namespace Catalog.Api
                    x => x.MigrationsHistoryTable("__EFMigrationsHistory","Catalog")
                )
             );
+
+
             //Registrar las dependencias para que este al nivel de los controladores
+            services.AddHealthChecks()
+                .AddCheck("self", () => HealthCheckResult.Healthy())
+                .AddDbContextCheck<ApplicationDBContext>();
+
+            services.AddHealthChecksUI();
+            
             services.AddMediatR(Assembly.Load("Catalog.Service.EventHandlers"));
 
             services.AddTransient<IProductQueryService, ProductQueryService>();
@@ -64,6 +75,13 @@ namespace Catalog.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+
+                endpoints.MapHealthChecksUI();
                 endpoints.MapControllers();
             });
         }
