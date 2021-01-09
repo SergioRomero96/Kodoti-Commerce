@@ -12,7 +12,7 @@ namespace Catalog.Persistence.Database.Configuration
         public ProductConfiguration(EntityTypeBuilder<Product> entityBuilder)
         {
             //configurar clave primaria
-            entityBuilder.HasIndex(x => x.ProductId);
+            entityBuilder.HasKey(x => x.ProductId);
             //configurar propiedad es requerido, y maximo 100 caracteres
             entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             entityBuilder.Property(x => x.Description).IsRequired().HasMaxLength(500);

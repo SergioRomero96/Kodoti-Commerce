@@ -33,6 +33,7 @@ namespace Catalog.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Inicializa la DB con Entity
             services.AddDbContext<ApplicationDBContext>(opts =>
                opts.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection"),
@@ -42,6 +43,7 @@ namespace Catalog.Api
 
 
             //Registrar las dependencias para que este al nivel de los controladores
+            //Para revisar si la DB esta operativa
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy())
                 .AddDbContextCheck<ApplicationDBContext>();
@@ -63,16 +65,21 @@ namespace Catalog.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            //
-            loggerFactory.AddSyslog(
-                Configuration.GetValue<string>("Papertrail:host"),
-                Configuration.GetValue<int>("Papertrail:port")
-           );
+            //Configuración de Logs
+            // Si no es entorno de desarrollo
+            if (!env.IsDevelopment())
+            {
+                loggerFactory.AddSyslog(
+                  Configuration.GetValue<string>("Papertrail:host"),
+                  Configuration.GetValue<int>("Papertrail:port")
+                );
+            }
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            //Exponer el enpoints
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()

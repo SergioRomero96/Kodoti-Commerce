@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Catalog.Api.Controllers
 {
     [ApiController]
-    [Route("products")]
+    [Route("v1/products")]
     public class ProductController:ControllerBase
     {
         private readonly ILogger<ProductController> _logger;

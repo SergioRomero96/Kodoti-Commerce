@@ -10,6 +10,7 @@ namespace Catalog.Persistence.Database
     public class ApplicationDBContext:DbContext
     {
         public ApplicationDBContext(
+            //Inicializa el constructor de la clase que esta heredando
             DbContextOptions<ApplicationDBContext> options) : base(options)
         {
 
@@ -22,7 +23,7 @@ namespace Catalog.Persistence.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            //Database schema
+            //Database schema: usa un esquema personalizado
             modelBuilder.HasDefaultSchema("Catalog");
 
             ModelConfig(modelBuilder);
